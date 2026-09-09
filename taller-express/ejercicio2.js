@@ -106,6 +106,8 @@ app.get('/api/impuestos', (req, res) => {
     }
 });
 
+// Se inicia el servidor en el puerto especificado
+// Prueba: http://localhost:3001/api/impuestos?pais=El%20Salvador&salario=1000
 app.listen(PORT, () => {
     console.log(`Ejercicio 2 corriendo en http://localhost:${PORT}`);
 });

@@ -32,6 +32,8 @@ app.get('/api/calculo/:monto', (req, res) => {
     }
 });
 
+// Se inicia el servidor en el puerto especificado
+// Prueba: http://localhost:3000/api/calculo/1000
 app.listen(PORT, () => {
     console.log(`Ejercicio 1 corriendo en http://localhost:${PORT}`);
 });
