@@ -4,7 +4,6 @@ const PORT = 3001;
 
 app.use(express.json());
 
-// Objeto con la configuración de tasas por país
 const TASAS_POR_PAIS = {
     "elsalvador": { nombre: "elsalvador", iva: 0.13, renta: 0.10 },
     "guatemala":  { nombre: "guatemala",  iva: 0.12, renta: 0.05 },
@@ -14,7 +13,6 @@ const TASAS_POR_PAIS = {
     "nicaragua":  { nombre: "nicaragua",  iva: 0.15, renta: 0.10 }
 };
 
-// Función auxiliar para normalizar el nombre del país (elimina tildes y espacios)
 function normalizarPais(pais) {
     if (typeof pais !== 'string') return '';
     return pais
@@ -24,7 +22,6 @@ function normalizarPais(pais) {
         .replace(/\s+/g, '');
 }
 
-// Función modular para calcular los impuestos
 function calcularImpuestos(salarioBruto, tasas) {
     const iva = Number((salarioBruto * tasas.iva).toFixed(2));
     const renta = Number((salarioBruto * tasas.renta).toFixed(2));
@@ -41,13 +38,10 @@ function calcularImpuestos(salarioBruto, tasas) {
     };
 }
 
-// Endpoint POST: recibe los datos en el cuerpo (JSON)
-// Ejemplo de Body: { "pais": "El Salvador", "salario": 1000 }
 app.post('/api/impuestos', (req, res) => {
     try {
         const { pais, salario } = req.body;
 
-        // 1. Validación de salario
         if (salario === undefined || salario === null || salario === "") {
             return res.status(400).json({ error: "El parámetro 'salario' es obligatorio." });
         }
@@ -57,7 +51,6 @@ app.post('/api/impuestos', (req, res) => {
             return res.status(400).json({ error: "El salario debe ser un número mayor a cero." });
         }
 
-        // 2. Validación de país
         if (!pais) {
             return res.status(400).json({ error: "El parámetro 'pais' es obligatorio." });
         }
@@ -72,7 +65,6 @@ app.post('/api/impuestos', (req, res) => {
             });
         }
 
-        // 3. Cálculo de la respuesta
         const resultado = calcularImpuestos(salarioNum, configPais);
         return res.status(200).json(resultado);
 
@@ -84,7 +76,6 @@ app.post('/api/impuestos', (req, res) => {
     }
 });
 
-// Endpoint GET alternativo (por si prefieres enviarlo vía Query Params: /api/impuestos?pais=El Salvador&salario=1000)
 app.get('/api/impuestos', (req, res) => {
     try {
         const { pais, salario } = req.query;
